@@ -1,21 +1,41 @@
 pipeline {
     agent any
-
+ 
     stages {
-        stage('Get Latest Sourcecode') {
+        stage('Get Latest Code') {
             steps {
-	        git 'https://github.com/ravishsubramanya/Jenkins_multijob_pipeline_code.git'
+                echo 'Get Latest Code'
+                // Get some code from a GitHub repository
+                git 'https://github.com/ravishsubramanya/Jenkins_Sample_Java_Project.git'
+            }
+        }
+        stage('Clean the Workspace') {
+            steps {
+                echo 'Clean the Workspace'
+                // Run Maven on a Unix agent.
+                sh "mvn clean"
             }
         }
         stage('Compile') {
             steps {
-                 sh "mvn clean compile"
+                echo 'Compile'
+                // Run Maven on a Unix agent.
+                sh "mvn clean compile"
             }
         }
         stage('Test') {
             steps {
-		input message: 'Are you sure to proceed to next step? ', ok: 'Yes'
-               sh "mvn test"
+                echo 'Test'
+                // Run Maven on a Unix agent.
+                sh "mvn clean compile test"
+
+            }
+        }
+        stage('Package the Solution') {
+            steps {
+                echo 'Package the Solution'
+                // Run Maven on a Unix agent.
+                sh "mvn clean compile package"
             }
         }
     }
